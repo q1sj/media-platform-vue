@@ -115,7 +115,7 @@
         <el-pagination
                 background
                 @current-change="handleCurrentChange"
-                :current-page="tableData.pageNum"
+                :current-page="page"
                 layout="total, prev, pager, next, jumper"
                 :page-size="pageSize"
                 :total="tableData.total"
@@ -128,7 +128,7 @@
         data() {
             return {
                 page:1,
-                pageSize:2,
+                pageSize:15,
                 name: '',
                 // 方向
                 direction: '',
