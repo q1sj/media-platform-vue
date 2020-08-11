@@ -31,13 +31,13 @@
                         :value="item.value">
                 </el-option>
             </el-select>
-            <el-button type="primary" icon="el-icon-search" @click="search(name,direction,status,isShow)">搜索</el-button>
+            <el-button type="primary" icon="el-icon-search" @click="search">搜索</el-button>
         </div>
 
 
         <!--表格-->
         <el-table
-                :data="tableData"
+                :data="tableData.list"
                 style="width: 100%" stripe>
             <el-table-column
                     prop="serviceName"
@@ -111,15 +111,24 @@
                 </template>
             </el-table-column>-->
         </el-table>
+        <!-- 分页区域 -->
+        <el-pagination
+                background
+                @current-change="handleCurrentChange"
+                :current-page="tableData.pageNum"
+                layout="total, prev, pager, next, jumper"
+                :page-size="pageSize"
+                :total="tableData.total"
+        ></el-pagination>
     </div>
-
-
 </template>
 
 <script>
     export default {
         data() {
             return {
+                page:1,
+                pageSize:2,
                 name: '',
                 // 方向
                 direction: '',
@@ -197,7 +206,7 @@
         },
         created() {
             //获取点位列表
-            this.search(this.name, this.direction, this.status, this.isShow);
+            this.search();
         },
         methods: {
             // 推流
@@ -216,10 +225,10 @@
                         "cameraId": cameraId
                     }).then(resp => {
                     if (resp.data.success) {
-                        this.search(this.name, this.direction, this.status, this.isShow);
+                        this.search();
                         this.$message.success('开始推流');
                     } else {
-                        this.search(this.name, this.direction, this.status, this.isShow);
+                        this.search();
                         this.$message.error(resp.data.msg);
                     }
                 })
@@ -232,18 +241,24 @@
                         "cameraId": cameraId
                     }).then(resp => {
                     if (resp.data.success) {
-                        this.search(this.name, this.direction, this.status, this.isShow);
+                        this.search();
                         this.$message.success('结束推流');
                     } else {
-                        this.search(this.name, this.direction, this.status, this.isShow);
+                        this.search();
                         this.$message.error(resp.data.msg);
                     }
                 })
             },
             // 搜索
-            search(name, direction, status, isShow) {
+            search() {
+                let name = this.name
+                let direction = this.direction
+                let status = this.status
+                let isShow = this.isShow
+                let page = this.page
+                let pageSize = this.pageSize
                 axios.post('/camera/getCameras', {
-                    name, direction, status, isShow
+                   name, direction, status, isShow,page,pageSize
                 }).then(resp => {
                     this.tableData = resp.data.data
                     if (resp.data.success) {
@@ -252,7 +267,12 @@
                         this.$message.error(resp.data.msg);
                     }
                 })
+            },
+            handleCurrentChange(currentPage){
+                this.page=currentPage;
+                this.search();
             }
+
         }
     }
 </script>
