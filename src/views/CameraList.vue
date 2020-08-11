@@ -1,36 +1,40 @@
 <template>
     <div>
-        <el-input
-                placeholder="点位名称"
-                v-model="name"
-                clearable
-                style="width: 150px">
-        </el-input>
-        <el-select v-model="direction" placeholder="方向" style="width: 100px" clearable>
-            <el-option
-                    v-for="item in directionList"
-                    :key="item.value"
-                    :label="item.label"
-                    :value="item.value">
-            </el-option>
-        </el-select>
-        <el-select v-model="status" placeholder="推流状态" style="width: 120px" clearable>
-            <el-option
-                    v-for="item in statusList"
-                    :key="item.value"
-                    :label="item.label"
-                    :value="item.value">
-            </el-option>
-        </el-select>
-        <el-select v-model="isShow" placeholder="省级平台是否展示" style="width: 180px" clearable>
-            <el-option
-                    v-for="item in isShowList"
-                    :key="item.value"
-                    :label="item.label"
-                    :value="item.value">
-            </el-option>
-        </el-select>
-        <el-button type="primary" icon="el-icon-search" @click="search(name,direction,status,isShow)">搜索</el-button>
+        <div style="float: right">
+            <el-input
+                    placeholder="点位名称"
+                    v-model="name"
+                    clearable
+                    style="width: 150px">
+            </el-input>
+            <el-select v-model="direction" placeholder="方向" style="width: 100px" clearable>
+                <el-option
+                        v-for="item in directionList"
+                        :key="item.value"
+                        :label="item.label"
+                        :value="item.value">
+                </el-option>
+            </el-select>
+            <el-select v-model="status" placeholder="推流状态" style="width: 120px" clearable>
+                <el-option
+                        v-for="item in statusList"
+                        :key="item.value"
+                        :label="item.label"
+                        :value="item.value">
+                </el-option>
+            </el-select>
+            <el-select v-model="isShow" placeholder="省级平台是否展示" style="width: 180px" clearable>
+                <el-option
+                        v-for="item in isShowList"
+                        :key="item.value"
+                        :label="item.label"
+                        :value="item.value">
+                </el-option>
+            </el-select>
+            <el-button type="primary" icon="el-icon-search" @click="search(name,direction,status,isShow)">搜索</el-button>
+        </div>
+
+
         <!--表格-->
         <el-table
                 :data="tableData"
@@ -213,7 +217,7 @@
                     }).then(resp => {
                     if (resp.data.success) {
                         this.search(this.name, this.direction, this.status, this.isShow);
-                        this.$message.success(resp.data.msg);
+                        this.$message.success('开始推流');
                     } else {
                         this.search(this.name, this.direction, this.status, this.isShow);
                         this.$message.error(resp.data.msg);
@@ -228,9 +232,8 @@
                         "cameraId": cameraId
                     }).then(resp => {
                     if (resp.data.success) {
-                        // this.list();
                         this.search(this.name, this.direction, this.status, this.isShow);
-                        this.$message.success(resp.data.msg);
+                        this.$message.success('结束推流');
                     } else {
                         this.search(this.name, this.direction, this.status, this.isShow);
                         this.$message.error(resp.data.msg);
@@ -243,11 +246,11 @@
                     name, direction, status, isShow
                 }).then(resp => {
                     this.tableData = resp.data.data
-                    /*if (resp.data.success) {
-                        this.$message.success(resp.data.msg);
+                    if (resp.data.success) {
+                        this.$message.success('刷新列表');
                     } else {
                         this.$message.error(resp.data.msg);
-                    }*/
+                    }
                 })
             }
         }

@@ -1,19 +1,12 @@
 <template>
-    <div id="app">
-        <!--    <CameraList msg="Welcome to Your Vue.js App"/>-->
-        <router-link to="/hello">test</router-link>
-        |
-        <router-link to="/cameraList">camera</router-link>
-        |
-        <router-link to="/serviceAreaList">service-area</router-link>
-        <br><br>
-        <router-view></router-view>
-    </div>
+    <router-view/>
 </template>
 
 <script>
+    import Home from './views/Home'
     export default {
         name: 'app',
+        components:{Home}
     }
 </script>
 
@@ -25,5 +18,9 @@
         text-align: center;
         color: #2c3e50;
         margin-top: 60px;
+    }
+    body{
+        margin: 0;
+        padding: 0;
     }
 </style>
