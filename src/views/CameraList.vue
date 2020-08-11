@@ -33,8 +33,6 @@
             </el-select>
             <el-button type="primary" icon="el-icon-search" @click="search">搜索</el-button>
         </div>
-
-
         <!--表格-->
         <el-table
                 :data="tableData.list"
@@ -111,7 +109,7 @@
                 </template>
             </el-table-column>-->
         </el-table>
-        <!-- 分页区域 -->
+        <!-- 分页 -->
         <el-pagination
                 background
                 @current-change="handleCurrentChange"

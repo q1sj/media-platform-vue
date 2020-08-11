@@ -1,7 +1,7 @@
 <template>
     <div class="login-container">
         <el-form ref="form" :model="form" label-width="80px" class="login-form">
-            <h2 class="login-title">管理系统</h2>
+            <h2 class="login-title">服务区视频中间件管理系统</h2>
             <el-form-item label="用户名">
                 <el-input v-model="form.username"></el-input>
             </el-form-item>
@@ -28,6 +28,10 @@
         methods: {
             onSubmit() {
                 console.log("submit!",this.form);
+                if (this.form.username.length==0 || this.form.password.length==0){
+                    this.$message.error('用户名密码不能为空')
+                    return;
+                }
                 axios.post('/sys/login',this.form).then(resp=>{
                     console.log(resp.data)
                     if (resp.data.success){
