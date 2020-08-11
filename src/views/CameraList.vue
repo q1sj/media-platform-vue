@@ -1,6 +1,15 @@
 <template>
     <div>
+        <!--搜索-->
         <div style="float: right">
+            <el-select v-model="serviceId" filterable placeholder="请选择服务区" clearable>
+                <el-option
+                        v-for="item in serviceAreaList"
+                        :key="item.id"
+                        :label="item.name"
+                        :value="item.id">
+                </el-option>
+            </el-select>
             <el-input
                     placeholder="点位名称"
                     v-model="name"
@@ -42,12 +51,12 @@
                     label="服务区名">
             </el-table-column>
             <el-table-column
-                    prop="name"
-                    label="点位名称">
-            </el-table-column>
-            <el-table-column
                     prop="directionName"
                     label="方向">
+            </el-table-column>
+            <el-table-column
+                    prop="name"
+                    label="点位名称">
             </el-table-column>
             <el-table-column
                     prop="manufacturer"
@@ -94,20 +103,6 @@
                     </el-switch>
                 </template>
             </el-table-column>
-
-            <!--<el-table-column label="操作">
-                <template slot-scope="scope">
-                    <el-button
-                            size="mini"
-                            @click="start(scope.row.serviceId,scope.row.id)">开启
-                    </el-button>
-                    <el-button
-                            size="mini"
-                            type="danger"
-                            @click="stop(scope.row.serviceId,scope.row.id)">停止
-                    </el-button>
-                </template>
-            </el-table-column>-->
         </el-table>
         <!-- 分页 -->
         <el-pagination
@@ -125,9 +120,12 @@
     export default {
         data() {
             return {
-                page:1,
-                pageSize:15,
+                page: 1,
+                pageSize: 15,
                 name: '',
+                // 服务区搜索条件
+                serviceId: '',
+                serviceAreaList: [],
                 // 方向
                 direction: '',
                 directionList: [
@@ -164,55 +162,21 @@
                         "value": false
                     }
                 ],
-                tableData: [
-                    /*{
-                        "id": 1,
-                        "serviceId": 1222,
-                        "name": "本地点位1",
-                        "direction": "up",
-                        "manufacturer": "海康",
-                        "model": "ddl",
-                        "style": "聚焦",
-                        "ip": "192.168.1.11",
-                        "port": "80",
-                        "rtsp": "rtsp://192.168.1.11",
-                        "status": true,
-                        "isShow": false,
-                        "cameraId": 321,
-                        "serviceName": "萧山服务区",
-                        "directionName": "上行(北区)"
-                    },
-                    {
-                        "id": 2,
-                        "serviceId": 21,
-                        "name": "本地点位2",
-                        "direction": "down",
-                        "manufacturer": "海康",
-                        "model": "ddl",
-                        "style": "聚焦",
-                        "ip": "192.168.1.12",
-                        "port": "80",
-                        "rtsp": "rtsp://192.168.1.12",
-                        "status": false,
-                        "isShow": false,
-                        "cameraId": 12,
-                        "serviceName": "萧山服务区",
-                        "directionName": "下行(南区)"
-                    }*/
-                ]
+                tableData: []
             }
         },
         created() {
             //获取点位列表
             this.search();
+            this.getServiceAreaList();
         },
         methods: {
             // 推流
-            push(row){
-                if (row.status){
-                    this.start(row.serviceId,row.id)
-                }else {
-                    this.stop(row.serviceId,row.id)
+            push(row) {
+                if (row.status) {
+                    this.start(row.serviceId, row.id)
+                } else {
+                    this.stop(row.serviceId, row.id)
                 }
             },
             // 开始推流
@@ -255,8 +219,9 @@
                 let isShow = this.isShow
                 let page = this.page
                 let pageSize = this.pageSize
+                let serviceId = this.serviceId
                 axios.post('/camera/getCameras', {
-                   name, direction, status, isShow,page,pageSize
+                    serviceId, name, direction, status, isShow, page, pageSize
                 }).then(resp => {
                     this.tableData = resp.data.data
                     if (resp.data.success) {
@@ -266,8 +231,14 @@
                     }
                 })
             },
-            handleCurrentChange(currentPage){
-                this.page=currentPage;
+            getServiceAreaList() {
+                axios.post('/serviceArea/getServiceAreas', {page: 0, pageSize: 0}).then(resp => {
+                    console.log(resp)
+                    this.serviceAreaList = resp.data.data.list;
+                })
+            },
+            handleCurrentChange(currentPage) {
+                this.page = currentPage;
                 this.search();
             }
 

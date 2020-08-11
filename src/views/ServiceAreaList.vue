@@ -69,7 +69,7 @@
                 let name = this.name;
                 let page = this.page;
                 let pageSize = this.pageSize;
-                axios.post('/serviceArea/getServiceAreas', {name,page,pageSize}).then(resp => {
+                axios.post('/serviceArea/getServiceAreas', {name, page, pageSize}).then(resp => {
                     console.log(resp)
                     this.tableData = resp.data.data
                 })
