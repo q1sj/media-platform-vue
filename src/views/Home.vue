@@ -27,14 +27,18 @@
                 navList: [
                     {name: '/cameraList', navItem: '点位列表'},
                     {name: '/serviceAreaList', navItem: '服务区列表'},
-                    {name: '/hello', navItem: 'test'}
                 ]
             };
         },
+        created() {
+            const user = JSON.parse(localStorage.getItem('user'))
+            // console.log(user)
+            // console.log(user.loginName =='admin')
+            if (user.loginName =='admin'){
+                this.navList.push({name: '/userList',navItem: '用户列表'})
+            }
+        },
         methods: {
-            handleSelect(key, keyPath) {
-                console.log(key, keyPath);
-            },
             logout() {//退出功能
                 //弹出确认对话框
                 //用户点击确认，跳回用户登录页面，清除token
@@ -52,7 +56,6 @@
                     localStorage.removeItem('user')
                     //跳转登录页面(编程式导航)
                     this.$router.push('/login')
-
                 }).catch(() => {
                     this.$message({
                         type: 'info',

@@ -2,7 +2,7 @@
     <div>
         <!--搜索-->
         <div style="float: right">
-            <el-select v-model="serviceId" filterable placeholder="请选择服务区" clearable>
+            <el-select v-model="serviceId" filterable placeholder="请选择服务区" clearable style="width: 150px">
                 <el-option
                         v-for="item in serviceAreaList"
                         :key="item.id"
@@ -88,6 +88,8 @@
                     <el-switch
                             @change="push(scope.row)"
                             v-model="scope.row.status"
+                            :width="54"
+                            :active-text="scope.row.status === true ? '开启' : '关闭'"
                             active-color="#13ce66"
                             inactive-color="#ff4949">
                     </el-switch>
@@ -98,6 +100,8 @@
                 <template slot-scope="scope">
                     <el-switch
                             v-model="scope.row.isShow"
+                            :width="54"
+                            :active-text="scope.row.isShow === true ? '展示' : '隐藏'"
                             active-color="#13ce66"
                             inactive-color="#ff4949">
                     </el-switch>
@@ -233,7 +237,7 @@
             },
             getServiceAreaList() {
                 axios.post('/serviceArea/getServiceAreas', {page: 0, pageSize: 0}).then(resp => {
-                    console.log(resp)
+                    // console.log(resp)
                     this.serviceAreaList = resp.data.data.list;
                 })
             },
@@ -245,3 +249,50 @@
         }
     }
 </script>
+
+<style lang='scss' scoped>
+    /deep/ .el-switch {
+        position: relative;
+        height: 24px;
+        line-height: 24px;
+        &.is-checked {
+            .el-switch__core {
+                background: #179bff;
+                &:after {
+                    margin-left: -22px;
+                }
+            }
+        }
+        .el-switch__label,
+        .el-switch__core {
+            height: 24px;
+        }
+        .el-switch__core {
+            border-radius: 12px;
+            border: none;
+            background: #f1f1f1;
+            &:after {
+                box-shadow: 0px 0px 4px 0px rgba(0, 0, 0, 0.3);
+                width: 22px;
+                height: 22px;
+            }
+        }
+        .el-switch__label.is-active {
+            color: #333;
+        }
+        .el-switch__label--right {
+            margin-left: 0px;
+            &.is-active {
+                color: #fff;
+                right: 24px;
+            }
+            position: absolute;
+            right: 5px;
+            top: -1px;
+            color: #999;
+            > span {
+                font-size: 12px;
+            }
+        }
+    }
+</style>

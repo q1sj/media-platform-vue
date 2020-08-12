@@ -29,6 +29,10 @@ const routes = [
                 path: '/serviceAreaList',
                 name: 'ServiceAreaList',
                 component: () => import('../views/ServiceAreaList')
+            },
+            {
+                path: '/userList',
+                component:()=>import('../views/UserList')
             }
         ]
     },
